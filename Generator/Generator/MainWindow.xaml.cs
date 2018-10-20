@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -56,6 +58,11 @@ namespace Generator
             return false;
         }
 
+        private void clear(object sender, EventArgs e)
+        {
+            (sender as TextBox).Text = "";
+        }
+
         private void generate_Click(object sender, RoutedEventArgs e)
         {
             if (checkPoly(poly1.Text) == true &&
@@ -82,6 +89,53 @@ namespace Generator
             {
                 var resut = MessageBox.Show("Coś poszło nie tak, sprawdź wszystkie pola jeszcze raz.");
             }
+        }
+
+        private void reset(object sender, RoutedEventArgs e)
+        {
+            init1.Text = "Wartości";
+            init2.Text = "Wartości";
+            init3.Text = "Wartości";
+            poly1.Text = "Wielomian";
+            poly2.Text = "Wielomian";
+            poly3.Text = "Wielomian";
+            len.Text = "Długość generowanego ciągu.";
+        }
+
+        private void load_file(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog op = new OpenFileDialog();
+                if (op.ShowDialog() == true)
+                    result.Text = File.ReadAllText(op.FileName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Coś poszło nie tak.\n Orginal message:" + ex.Message);
+            }
+        }
+
+        private void step_by_step(object sender, RoutedEventArgs e)
+        {
+            step_by_stepxaml aspdk = new step_by_stepxaml();
+            aspdk.Show();
+        }
+
+        private void load_about(object sender, RoutedEventArgs e)
+        {
+        }
+        
+
+        private void save_file(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog()
+            {
+                Filter = "Text Files(*.txt)|*.txt|All(*.*)|*"
+            };
+
+            if (dialog.ShowDialog() == true)
+                File.WriteAllText(dialog.FileName, result.Text);
         }
     }
 }
