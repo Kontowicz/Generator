@@ -12,7 +12,7 @@ namespace Generator
         private lfsr lfsr2;
         private lfsr lfsr3;
 
-        geffe(lfsr _1, lfsr _2, lfsr _3)
+        public geffe(lfsr _1, lfsr _2, lfsr _3)
         {
             lfsr1 = _1;
             lfsr2 = _2;
