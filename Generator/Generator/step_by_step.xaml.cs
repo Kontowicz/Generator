@@ -62,28 +62,30 @@ namespace Generator
         }
         private void init()
         {
-
             string _l1 = geffe.get1();
             string _l2 = geffe.get2();
             string _l3 = geffe.get3();
 
             FlowDocument mcFlowDoc = new FlowDocument();
             Paragraph para = new Paragraph();
-            para.Inlines.Add(new Run(_l1.Substring(0, _l1.Length - 2)));
+            para.Inlines.Add(new Bold(new Run(_l1.Substring(0, 1))));
+            para.Inlines.Add(new Run(_l1.Substring(1, _l1.Length - 2)));
             para.Inlines.Add(new Bold(new Run(_l1[_l1.Length - 1].ToString())));
             mcFlowDoc.Blocks.Add(para);
             l1.Document = mcFlowDoc;
 
             mcFlowDoc = new FlowDocument();
             para = new Paragraph();
-            para.Inlines.Add(new Run(_l2.Substring(0, _l2.Length - 2)));
+            para.Inlines.Add(new Bold(new Run(_l2.Substring(0, 1))));
+            para.Inlines.Add(new Run(_l2.Substring(1, _l2.Length - 2)));
             para.Inlines.Add(new Bold(new Run(_l2[_l2.Length - 1].ToString())));
             mcFlowDoc.Blocks.Add(para);
             l2.Document = mcFlowDoc;
 
             mcFlowDoc = new FlowDocument();
             para = new Paragraph();
-            para.Inlines.Add(new Run(_l3.Substring(0, _l3.Length - 2)));
+            para.Inlines.Add(new Bold(new Run(_l3.Substring(0, 1))));
+            para.Inlines.Add(new Run(_l3.Substring(1, _l3.Length - 2)));
             para.Inlines.Add(new Bold(new Run(_l3[_l3.Length - 1].ToString())));
             mcFlowDoc.Blocks.Add(para);
             l3.Document = mcFlowDoc;
@@ -117,6 +119,7 @@ namespace Generator
         private void next(object sender, RoutedEventArgs e)
         {
             string next = geffe.next().ToString();
+            init();
             FlowDocument mcFlowDoc = new FlowDocument();
             Paragraph para = new Paragraph();
             para.Inlines.Add(new Bold(new Run(next)));
@@ -124,6 +127,19 @@ namespace Generator
             res = res.Insert(0, next);
             mcFlowDoc.Blocks.Add(para);
             result.Document = mcFlowDoc;
+            _2.Stroke = new SolidColorBrush(Colors.Black);
+            _3.Stroke = new SolidColorBrush(Colors.Black);
+            if(next == "1")
+            {
+                _2.Stroke = new SolidColorBrush(Colors.Red);
+                _3.Stroke = new SolidColorBrush(Colors.Black);
+            }
+            else
+            {
+                _2.Stroke = new SolidColorBrush(Colors.Black);
+                _3.Stroke = new SolidColorBrush(Colors.Red);
+            }
+
         }
 
         private void stop(object sender, RoutedEventArgs e)
