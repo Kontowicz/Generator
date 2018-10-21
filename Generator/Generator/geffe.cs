@@ -19,6 +19,20 @@ namespace Generator
             lfsr3 = _3;
         }
 
+        public string get1()
+        {
+            return lfsr1.getRegister();
+        }
+
+        public string get2()
+        {
+            return lfsr2.getRegister();
+        }
+        public string get3()
+        {
+            return lfsr3.getRegister();
+        }
+
         public int next()
         {
             int toReturn = 0;

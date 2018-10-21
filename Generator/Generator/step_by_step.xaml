@@ -60,15 +60,15 @@
         <Button Grid.Column="8" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="10" Content="Następny krok" Name="next1" Click="next" Visibility="Hidden"/>
 
         <Canvas Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="10" Grid.RowSpan="8">
-            <TextBox Canvas.Left="10" Canvas.Top="100" Width="180" Height="20" Focusable="False" Name="l2"/>
-            <TextBox Canvas.Left="10" Canvas.Top="150" Width="180" Height="20" Focusable="False" Name="l3"/>
-            <TextBox Canvas.Left="10" Canvas.Top="250" Width="180" Height="20" Focusable="False" Name="l1"/>
+            <RichTextBox Canvas.Left="10" Canvas.Top="100" Width="180" Height="20" Focusable="False" Name="l2"/>
+            <RichTextBox Canvas.Left="10" Canvas.Top="150" Width="180" Height="20" Focusable="False" Name="l3"/>
+            <RichTextBox Canvas.Left="10" Canvas.Top="250" Width="180" Height="20" Focusable="False" Name="l1"/>
             <Line X1="190" Y1="110" X2="290" Y2="110" Stroke="Black" StrokeThickness="3" Name="_2"/>
             <Line X1="190" Y1="160" X2="290" Y2="160" Stroke="Black" StrokeThickness="3" Name="_3"/>
             <Line X1="190" Y1="260" X2="390" Y2="260" Stroke="Red" StrokeThickness="5"/>
             <Line X1="390" Y1="160" X2="390" Y2="260" Stroke="Red" StrokeThickness="5"/>
             <Rectangle Canvas.Top="100" Canvas.Left="290" Width="150" Height="60" Stroke="Black" Fill="Aqua"/>
-            <TextBox Canvas.Left="500" Canvas.Top="120" Width="400" Focusable="False" Height="20"/>
+            <RichTextBox Canvas.Left="500" Canvas.Top="120" Width="400" Height="20" Name="result"/>
             <Line X1="440" Y1="130" X2="500" Y2="130" Stroke="Red" StrokeThickness="5"/>
             <TextBlock Canvas.Left="290" TextWrapping="Wrap" Text="             Multiplekser" Canvas.Top="115" Height="60" Width="150"/>
 

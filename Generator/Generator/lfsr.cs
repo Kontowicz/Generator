@@ -38,7 +38,10 @@ namespace Generator
 
             return output;
         }
-        
+        public string getRegister()
+        {
+            return string.Join("", register);
+        }
         public lfsr(string polynomial, string begin)
         {
             register = new int[begin.Length];
