@@ -79,11 +79,36 @@ namespace Generator
                 geffe ge = new geffe(_1, _2, _3);
                 long tmp = long.Parse(len.Text);
                 string to_return = "";
+                
                 for(long i = 0; i<tmp; ++i)
-                {
                     to_return += ge.next().ToString();
-                }
+
                 result.Text = to_return;
+
+                using (System.IO.StreamWriter param1 = new System.IO.StreamWriter(@".\param1.txt"))
+                {
+                    param1.WriteLine(poly1.Text);
+                    param1.WriteLine(init1.Text);
+                }
+                using (System.IO.StreamWriter param2 = new System.IO.StreamWriter(@".\param2.txt"))
+                {
+                    param2.WriteLine(poly2.Text);
+                    param2.WriteLine(init2.Text);
+                }
+                using (System.IO.StreamWriter param3 = new System.IO.StreamWriter(@".\param3.txt"))
+                {
+                    param3.WriteLine(poly3.Text);
+                    param3.WriteLine(init3.Text);
+                }
+                using (System.IO.StreamWriter param3 = new System.IO.StreamWriter(@".\len.txt"))
+                {
+                    param3.WriteLine(len.Text);
+                }
+                using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\result.txt"))
+                {
+                    fileResult.Write(to_return);
+                }
+
             }
             else
             {
@@ -126,7 +151,6 @@ namespace Generator
         {
         }
         
-
         private void save_file(object sender, RoutedEventArgs e)
         {
             SaveFileDialog dialog = new SaveFileDialog()
@@ -136,6 +160,36 @@ namespace Generator
 
             if (dialog.ShowDialog() == true)
                 File.WriteAllText(dialog.FileName, result.Text);
+        }
+
+        private void load_init(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using (System.IO.StreamReader param1 = new System.IO.StreamReader(@".\param1.txt"))
+                {
+                    poly1.Text = param1.ReadLine();
+                    init1.Text = param1.ReadLine();
+                }
+                using (System.IO.StreamReader param1 = new System.IO.StreamReader(@".\param2.txt"))
+                {
+                    poly2.Text = param1.ReadLine();
+                    init2.Text = param1.ReadLine();
+                }
+                using (System.IO.StreamReader param1 = new System.IO.StreamReader(@".\param3.txt"))
+                {
+                    poly3.Text = param1.ReadLine();
+                    init3.Text = param1.ReadLine();
+                }
+                using (System.IO.StreamReader param3 = new System.IO.StreamReader(@".\len.txt"))
+                {
+                    len.Text = param3.ReadLine();
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Coś poszło nie tak, sprawdź istnieją wszystkie pliki.");
+            }
         }
     }
 }
