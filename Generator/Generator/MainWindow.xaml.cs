@@ -25,6 +25,7 @@ namespace Generator
     {
         private const string Pattern = "[^0-9x\\+]";
         private const string Pattern1 = "[^0-1]";
+        private const string V = @".\randomInit\";
 
         public MainWindow()
         {
@@ -108,7 +109,6 @@ namespace Generator
                 {
                     fileResult.Write(to_return);
                 }
-
             }
             else
             {
@@ -164,26 +164,27 @@ namespace Generator
 
         private void load_init(object sender, RoutedEventArgs e)
         {
+            Random r = new Random();
+            int n = r.Next(1, 2900);
+            string path = V + n.ToString();
+            System.Console.Write(path);
             try
             {
-                using (System.IO.StreamReader param1 = new System.IO.StreamReader(@".\param1.txt"))
+
+                using (System.IO.StreamReader param1 = new System.IO.StreamReader(path + @"\poly1.txt"))
                 {
                     poly1.Text = param1.ReadLine();
                     init1.Text = param1.ReadLine();
                 }
-                using (System.IO.StreamReader param1 = new System.IO.StreamReader(@".\param2.txt"))
+                using (System.IO.StreamReader param1 = new System.IO.StreamReader(path + @"\poly2.txt"))
                 {
                     poly2.Text = param1.ReadLine();
                     init2.Text = param1.ReadLine();
                 }
-                using (System.IO.StreamReader param1 = new System.IO.StreamReader(@".\param3.txt"))
+                using (System.IO.StreamReader param1 = new System.IO.StreamReader(path + @"\poly3.txt"))
                 {
                     poly3.Text = param1.ReadLine();
                     init3.Text = param1.ReadLine();
-                }
-                using (System.IO.StreamReader param3 = new System.IO.StreamReader(@".\len.txt"))
-                {
-                    len.Text = param3.ReadLine();
                 }
             }
             catch (Exception)
@@ -191,5 +192,7 @@ namespace Generator
                 MessageBox.Show("Coś poszło nie tak, sprawdź istnieją wszystkie pliki.");
             }
         }
+
+
     }
 }
