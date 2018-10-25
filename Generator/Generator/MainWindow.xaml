@@ -56,6 +56,9 @@
         <MenuItem Header="Otwórz" Click="load_file"/>
         <MenuItem Header="O programie" Click="load_about"/>
         <MenuItem Header="Krok po kroku" Click="step_by_step"/>
+            <MenuItem Header="Testy">
+                <MenuItem Header="Monobit" Click="monobit"/>
+            </MenuItem> 
         </Menu>
     </Grid>
 </Window>
