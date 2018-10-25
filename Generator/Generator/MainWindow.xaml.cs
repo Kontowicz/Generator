@@ -26,7 +26,7 @@ namespace Generator
         private const string Pattern = "[^0-9x\\+]";
         private const string Pattern1 = "[^0-1]";
         private const string V = @".\randomInit\";
-
+        private Random r = new Random();
         public MainWindow()
         {
             InitializeComponent();
@@ -53,8 +53,9 @@ namespace Generator
         private bool checkNumer(string text)
         {
             string test = Regex.Replace(text, "[^0-9]", "");
-            if (test == text && text[0] != '0')
-                return true;
+            if(test != "")
+                if (test == text && text[0] != '0')
+                    return true;
 
             return false;
         }
@@ -77,30 +78,15 @@ namespace Generator
                 lfsr _1 = new lfsr(poly1.Text, init1.Text);
                 lfsr _2 = new lfsr(poly2.Text, init2.Text);
                 lfsr _3 = new lfsr(poly3.Text, init3.Text);
-                geffe ge = new geffe(_1, _2, _3);
-                long tmp = long.Parse(len.Text);
+                geffe geffe = new geffe(_1, _2, _3);
+                long ammount = long.Parse(len.Text);
                 string to_return = "";
                 
-                for(long i = 0; i<tmp; ++i)
-                    to_return += ge.next().ToString();
+                for(long i = 0; i<ammount; ++i)
+                    to_return += geffe.next().ToString();
 
                 result.Text = to_return;
 
-                using (System.IO.StreamWriter param1 = new System.IO.StreamWriter(@".\param1.txt"))
-                {
-                    param1.WriteLine(poly1.Text);
-                    param1.WriteLine(init1.Text);
-                }
-                using (System.IO.StreamWriter param2 = new System.IO.StreamWriter(@".\param2.txt"))
-                {
-                    param2.WriteLine(poly2.Text);
-                    param2.WriteLine(init2.Text);
-                }
-                using (System.IO.StreamWriter param3 = new System.IO.StreamWriter(@".\param3.txt"))
-                {
-                    param3.WriteLine(poly3.Text);
-                    param3.WriteLine(init3.Text);
-                }
                 using (System.IO.StreamWriter param3 = new System.IO.StreamWriter(@".\len.txt"))
                 {
                     param3.WriteLine(len.Text);
@@ -162,15 +148,13 @@ namespace Generator
                 File.WriteAllText(dialog.FileName, result.Text);
         }
 
-        private void load_init(object sender, RoutedEventArgs e)
+        private void init()
         {
-            Random r = new Random();
             int n = r.Next(1, 2900);
             string path = V + n.ToString();
-            System.Console.Write(path);
+            MessageBox.Show("Dane początkowe zostały pobrane z folderu: " + path);
             try
             {
-
                 using (System.IO.StreamReader param1 = new System.IO.StreamReader(path + @"\poly1.txt"))
                 {
                     poly1.Text = param1.ReadLine();
@@ -193,6 +177,60 @@ namespace Generator
             }
         }
 
+        private void init(string num)
+        {
+            string path = V + num;
+            MessageBox.Show("Dane początkowe zostały pobrane z folderu: " + path);
+            try
+            {
+                using (System.IO.StreamReader param1 = new System.IO.StreamReader(path + @"\poly1.txt"))
+                {
+                    poly1.Text = param1.ReadLine();
+                    init1.Text = param1.ReadLine();
+                }
+                using (System.IO.StreamReader param1 = new System.IO.StreamReader(path + @"\poly2.txt"))
+                {
+                    poly2.Text = param1.ReadLine();
+                    init2.Text = param1.ReadLine();
+                }
+                using (System.IO.StreamReader param1 = new System.IO.StreamReader(path + @"\poly3.txt"))
+                {
+                    poly3.Text = param1.ReadLine();
+                    init3.Text = param1.ReadLine();
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Coś poszło nie tak, sprawdź istnieją wszystkie pliki.");
+            }
+        }
 
+        private void load_init(object sender, RoutedEventArgs e)
+        {
+            string t = number.Text;
+            if(checkNumer(number.Text) == true)
+            {
+                try
+                {
+                    int folderNum;
+                    bool res = Int32.TryParse(number.Text, out folderNum);
+                    if(res == true)
+                    {
+                        init(number.Text);
+                    }else
+                    {
+                        MessageBox.Show("Sprawdź poprawność wporwadzonej liczby.");
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Sprawdź poprawność wporwadzonej liczby.");
+                }
+            }
+            else
+            {
+                init();
+            }
+        }
     }
 }
