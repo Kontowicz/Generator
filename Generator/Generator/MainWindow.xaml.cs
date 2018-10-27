@@ -100,12 +100,7 @@ namespace Generator
                 string test = await Task.Run(() => gen(geffe, ammount));
                 result.Text = test;
 
-
-                using (System.IO.StreamWriter param3 = new System.IO.StreamWriter(@".\len.txt"))
-                {
-                    param3.WriteLine(len.Text);
-                }
-                using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\" + number.Text + @".txt"))
+                using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\"+ number.Text + "_" + len.Text + @".txt"))
                 {
                     fileResult.Write(result.Text);
                 }
@@ -115,7 +110,6 @@ namespace Generator
                 var resut = MessageBox.Show("Coś poszło nie tak, sprawdź wszystkie pola jeszcze raz.");
             }
         }
-
 
         private void reset(object sender, RoutedEventArgs e)
         {
@@ -249,9 +243,162 @@ namespace Generator
             }
         }
 
-        private void monobit(object sender, RoutedEventArgs e)
+        private void cipher(object sender, RoutedEventArgs e)
+        {
+            cipher c = new cipher();
+            c.Show();
+        }
+
+        private void serial(object sender, RoutedEventArgs e)
+        {
+            if(result.Text.Length >= 20000)
+            {
+                string data = result.Text.Substring(0, 20000);
+                string[] data_arr = Regex.Split(data, @"(0+)");
+                var number = new Dictionary<int, int>();
+                foreach (var a in data_arr)
+                {
+                    if (!number.ContainsKey(a.Length))
+                        number[a.Length] = 1;
+                    else
+                        ++number[a.Length];
+                }
+                int[,] arr = new int[5,2];
+                arr[0,0] = 2315;
+                arr[0,1] = 2685;
+
+                arr[1, 0] = 1114;
+                arr[1, 1] = 1386;
+
+                arr[2, 0] = 527;
+                arr[2, 1] = 723;
+
+                arr[3, 0] = 240;
+                arr[3, 1] = 384;
+
+                arr[4, 0] = 103;
+                arr[4, 1] = 209;
+
+                bool resultrr = true;
+
+                foreach (KeyValuePair<int, int> kvp in number)
+                {
+                    if(kvp.Key < 0 && kvp.Key > 5)
+                    {
+                        if(!(arr[kvp.Key-1,0] <= kvp.Value) && !(kvp.Value <= arr[kvp.Key - 1, 1]))
+                        {
+                            resultrr = false;
+                        }
+                    }
+                    else
+                    {
+                        if (!(arr[4, 0] <= kvp.Value) && !(kvp.Value <= arr[4, 1]))
+                        {
+                            resultrr = false;
+                        }
+                    }                   
+                }
+
+                if(resultrr == true)
+                {
+                    MessageBox.Show("Test zdany.");
+                }
+                else
+                {
+                    MessageBox.Show("Test nie zdany.");
+                }
+            }else
+            {
+                MessageBox.Show("Badany ciąg jest za krótki.");
+            }
+            
+        }
+
+        private void bits(object sender, RoutedEventArgs e)
+        {
+            if (result.Text.Length >= 20000)
+            {
+                string data = result.Text.Substring(0, 20000);
+                int amm = 0;
+                foreach (var s in data)
+                    if (s == '1')
+                        ++amm;
+
+                if (amm>=9725 && amm<=10275)
+                    MessageBox.Show("Test zdany.\nWystąpiło :" + amm.ToString() + " jedynek.");
+                else
+                    MessageBox.Show("Test nie zdany.");
+            }
+            else
+            {
+                MessageBox.Show("Badany ciąg jest za krótki.");
+            }
+
+        }
+
+        private void poker(object sender, RoutedEventArgs e)
         {
 
+
+            if (result.Text.Length >= 20000)
+            {
+                var number = new Dictionary<string, int>();
+                for(int i = 0;  i < 20000; i+=4)
+                {
+                    if (!number.ContainsKey(result.Text.Substring(i,4)))
+                        number[result.Text.Substring(i, 4)] = 1;
+                    else
+                        ++number[result.Text.Substring(i, 4)];
+                }
+
+                double val = 0;
+                foreach(var eee in number)
+                {
+                    val += (eee.Value* eee.Value);
+                }
+
+                val *= (16.00 / 5000.00);
+                val -= 5000;
+                if (2.16<val && val < 46.17)
+                    MessageBox.Show("Test zdany.\nWartość X = " + val.ToString());
+                else
+                    MessageBox.Show("Test nie zdany.");
+            }
+            else
+            {
+                MessageBox.Show("Badany ciąg jest za krótki.");
+            }
+        }
+
+        private void longSerial(object sender, RoutedEventArgs e)
+        {
+            if (result.Text.Length >= 20000)
+            {
+                string data = result.Text.Substring(0, 20000);
+                string[] data_arr = Regex.Split(data, @"(0+)");
+                bool res = true;
+                foreach (var a in data_arr)
+                {
+                    if(a.Length>25)
+                    {
+                        res = false;
+                        break;
+                    }
+                }
+
+                if (res)
+                {
+                    MessageBox.Show("Test zdany.");
+                }
+                else
+                {
+                    MessageBox.Show("Test nie zdany.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Badany ciąg jest za krótki.");
+            }
         }
     }
 }

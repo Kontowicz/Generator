@@ -71,7 +71,6 @@
             <RichTextBox Canvas.Left="500" Canvas.Top="120" Width="400" Height="20" Name="result"/>
             <Line X1="440" Y1="130" X2="500" Y2="130" Stroke="Red" StrokeThickness="5"/>
             <TextBlock Canvas.Left="290" TextWrapping="Wrap" Text="             Multiplekser" Canvas.Top="115" Height="60" Width="150"/>
-
         </Canvas>
 
     </Grid>
