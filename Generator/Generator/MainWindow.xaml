@@ -62,8 +62,8 @@
               <MenuItem Header="Długiej serii" Click="longSerial"/>
               <MenuItem Header="Pokerowy" Click="poker"/>
               <MenuItem Header="Pojedynczych bitów" Click="bits"/>
-              <MenuItem Header="Uruchom wszystkie"/>
-              <MenuItem Header="Uruchom wszystkie dla folderu"/>
+              <MenuItem Header="Uruchom wszystkie" Click="runAll"/>
+              <MenuItem Header="Uruchom wszystkie dla folderu" Click="runAllWholeDictionary"/>
             </MenuItem>
         </Menu>
     </Grid>
