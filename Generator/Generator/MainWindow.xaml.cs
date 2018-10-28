@@ -94,10 +94,28 @@ namespace Generator
                 
                 string test = await Task.Run(() => gen(geffe, textLen));
                 result.Text = test;
-                if(number.Text == "Numer folderu z danymi.")
+                int tryParse = -1;
+                bool res = int.TryParse(number.Text, out tryParse);
+                if (res || ( tryParse < 1 && tryParse > 2900))
                 {
-
-                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\user\" + len.Text + @".txt"))
+                    string dirName = DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss");
+                    System.IO.Directory.CreateDirectory(@".\user\" + dirName);
+                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\user\" + dirName + @"\lsfr1.txt"))
+                    {
+                        fileResult.WriteLine(poly1.Text);
+                        fileResult.WriteLine(init1.Text);
+                    }
+                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\user\" + dirName + @"\lsfr2.txt"))
+                    {
+                        fileResult.WriteLine(poly2.Text);
+                        fileResult.WriteLine(init3.Text);
+                    }
+                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\user\" + dirName + @"\lsfr3.txt"))
+                    {
+                        fileResult.WriteLine(poly3.Text);
+                        fileResult.WriteLine(init3.Text);
+                    }
+                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\user\" + dirName + @"\result.txt"))
                     {
                         fileResult.Write(result.Text);
                     }
@@ -123,6 +141,8 @@ namespace Generator
             poly2.Text = "Wielomian";
             poly3.Text = "Wielomian";
             len.Text = "Długość generowanego ciągu.";
+            result.Text = "";
+            number.Text = "Numer folderu z danymi.";
         }
 
         private void load_file(object sender, RoutedEventArgs e)
@@ -191,6 +211,36 @@ namespace Generator
             }
         }
 
+        private void initUser(string path)
+        {
+            try
+            {
+                using (System.IO.StreamReader param1 = new System.IO.StreamReader(path + @"\lsfr1.txt"))
+                {
+                    poly1.Text = param1.ReadLine();
+                    init1.Text = param1.ReadLine();
+                }
+                using (System.IO.StreamReader param1 = new System.IO.StreamReader(path + @"\lsfr2.txt"))
+                {
+                    poly2.Text = param1.ReadLine();
+                    init2.Text = param1.ReadLine();
+                }
+                using (System.IO.StreamReader param1 = new System.IO.StreamReader(path + @"\lsfr3.txt"))
+                {
+                    poly3.Text = param1.ReadLine();
+                    init3.Text = param1.ReadLine();
+                }
+                using (System.IO.StreamReader param1 = new System.IO.StreamReader(path + @"\result.txt"))
+                {
+                    result.Text = param1.ReadToEnd();
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Coś poszło nie tak, sprawdź istnieją wszystkie pliki.", "Błąd");
+            }
+        }
+
         private void init(string num)
         {
             string path = V + num;
@@ -221,6 +271,11 @@ namespace Generator
 
         private void load_init(object sender, RoutedEventArgs e)
         {
+            if(number.Text.Contains("user"))
+            {
+                initUser(number.Text);
+                return;
+            }
             int folderNum;
             bool res = Int32.TryParse(number.Text, out folderNum);
             if (res)
