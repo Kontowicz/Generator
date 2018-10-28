@@ -1,21 +1,11 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 
 namespace Generator
@@ -27,7 +17,6 @@ namespace Generator
     public partial class MainWindow : Window
     {
         private geffe geffe;
-        long ammount;
         private const string Pattern = "[^0-9x\\+]";
         private const string Pattern1 = "[^0-1]";
         private const string V = @".\randomInit\";
@@ -43,7 +32,6 @@ namespace Generator
             string test = Regex.Replace(text, Pattern, "");
             if(test == text)
                 return true;
-
             return false;
         }
 
@@ -52,7 +40,6 @@ namespace Generator
             string test = Regex.Replace(text, Pattern1, "");
             if (test == text)
                 return true;
-
             return false;
         }
 
@@ -62,7 +49,6 @@ namespace Generator
             if(test != "")
                 if (test == text && text[0] != '0')
                     return true;
-
             return false;
         }
 
@@ -71,12 +57,11 @@ namespace Generator
             (sender as TextBox).Text = "";
         }
 
-        private string gen(geffe g, long amm)
+        private string gen(geffe g, long len)
         {
             string to_return = "";
-            for (long i = 0; i < amm; ++i)
+            for (long i = 0; i < len; ++i)
                 to_return += geffe.next().ToString();
-
             return to_return;
         }
 
@@ -94,10 +79,8 @@ namespace Generator
                 lfsr _2 = new lfsr(poly2.Text, init2.Text);
                 lfsr _3 = new lfsr(poly3.Text, init3.Text);
                 geffe = new geffe(_1, _2, _3);
-                ammount = long.Parse(len.Text);
-
-
-                string test = await Task.Run(() => gen(geffe, ammount));
+                long textLen = long.Parse(len.Text);
+                string test = await Task.Run(() => gen(geffe, textLen));
                 result.Text = test;
 
                 using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\"+ number.Text + "_" + len.Text + @".txt"))
@@ -138,8 +121,8 @@ namespace Generator
 
         private void step_by_step(object sender, RoutedEventArgs e)
         {
-            step_by_stepxaml aspdk = new step_by_stepxaml();
-            aspdk.Show();
+            step_by_stepxaml stepBystep = new step_by_stepxaml();
+            stepBystep.Show();
         }
 
         private void load_about(object sender, RoutedEventArgs e)
@@ -225,12 +208,9 @@ namespace Generator
                     int folderNum;
                     bool res = Int32.TryParse(number.Text, out folderNum);
                     if(res == true)
-                    {
                         init(number.Text);
-                    }else
-                    {
+                    else
                         MessageBox.Show("Sprawdź poprawność wporwadzonej liczby.", "Błąd");
-                    }
                 }
                 catch (Exception)
                 {
@@ -245,8 +225,8 @@ namespace Generator
 
         private void cipher(object sender, RoutedEventArgs e)
         {
-            cipher c = new cipher();
-            c.Show();
+            cipher encypt = new cipher();
+            encypt.Show();
         }
 
         private bool serialTest( string text)
@@ -261,21 +241,21 @@ namespace Generator
                     ++number[a.Length];
             }
 
-            int[,] section = new int[5, 2];
-            section[0, 0] = 2315;
-            section[0, 1] = 2685;
+            int[,] compare_arr = new int[5, 2];
+            compare_arr[0, 0] = 2315;
+            compare_arr[0, 1] = 2685;
 
-            section[1, 0] = 1114;
-            section[1, 1] = 1386;
+            compare_arr[1, 0] = 1114;
+            compare_arr[1, 1] = 1386;
 
-            section[2, 0] = 527;
-            section[2, 1] = 723;
+            compare_arr[2, 0] = 527;
+            compare_arr[2, 1] = 723;
 
-            section[3, 0] = 240;
-            section[3, 1] = 384;
+            compare_arr[3, 0] = 240;
+            compare_arr[3, 1] = 384;
 
-            section[4, 0] = 103;
-            section[4, 1] = 209;
+            compare_arr[4, 0] = 103;
+            compare_arr[4, 1] = 209;
 
             bool toReturn = true;
 
@@ -283,17 +263,13 @@ namespace Generator
             {
                 if (kvp.Key < 0 && kvp.Key > 5)
                 {
-                    if (!(section[kvp.Key - 1, 0] <= kvp.Value) && !(kvp.Value <= section[kvp.Key - 1, 1]))
-                    {
+                    if (!(compare_arr[kvp.Key - 1, 0] <= kvp.Value) && !(kvp.Value <= compare_arr[kvp.Key - 1, 1]))
                         toReturn = false;
-                    }
                 }
                 else
                 {
-                    if (!(section[4, 0] <= kvp.Value) && !(kvp.Value <= section[4, 1]))
-                    {
+                    if (!(compare_arr[4, 0] <= kvp.Value) && !(kvp.Value <= compare_arr[4, 1]))
                         toReturn = false;
-                    }
                 }
             }
 
@@ -305,13 +281,9 @@ namespace Generator
             if(result.Text.Length >= 20000)
             {
                 if(serialTest(result.Text.Substring(0,20000)) == true)
-                {
                     MessageBox.Show("Test zdany.", "Wynik");
-                }
                 else
-                {
                     MessageBox.Show("Test nie zdany.", "Wynik");
-                }
             }else
             {
                 MessageBox.Show("Badany ciąg jest za krótki.", "Błąd");
@@ -351,28 +323,28 @@ namespace Generator
 
         private Tuple<bool, double> pokerTest(string text)
         {
-            var number = new Dictionary<string, int>();
+            var combinations = new Dictionary<string, int>();
             for (int i = 0; i < 20000; i += 4)
             {
-                if (!number.ContainsKey(text.Substring(i, 4)))
-                    number[text.Substring(i, 4)] = 1;
+                if (!combinations.ContainsKey(text.Substring(i, 4)))
+                    combinations[text.Substring(i, 4)] = 1;
                 else
-                    ++number[text.Substring(i, 4)];
+                    ++combinations[text.Substring(i, 4)];
             }
 
-            double val = 0;
-            foreach (var eee in number)
+            double X = 0;
+            foreach (var eee in combinations)
             {
-                val += (eee.Value * eee.Value);
+                X += (eee.Value * eee.Value);
             }
 
-            val *= (16.00 / 5000.00);
-            val -= 5000;
+            X *= (16.00 / 5000.00);
+            X -= 5000;
 
-            if (2.16 < val && val < 46.17)
-                return new Tuple<bool, double>(true, val);
+            if (2.16 < X && X < 46.17)
+                return new Tuple<bool, double>(true, X);
 
-            return new Tuple<bool, double>(false, val);
+            return new Tuple<bool, double>(false, X);
         }
 
         private void poker(object sender, RoutedEventArgs e)
@@ -394,7 +366,6 @@ namespace Generator
         private bool longSerialTest(string text)
         {
             string[] data_arr = Regex.Split(text, @"(0+)");
-            bool res = true;
             foreach (var a in data_arr)
             {
                 if (a.Length > 25)
@@ -463,11 +434,11 @@ namespace Generator
             }
         }
 
-        private void runAllWholeDictionary(object sender, RoutedEventArgs e)
+        private void runAllWholeDirctory(object sender, RoutedEventArgs e)
         {
-            DirectoryInfo d = new DirectoryInfo(@"..\Data");//Assuming Test is your Folder
-            FileInfo[] Files = d.GetFiles("*.txt"); //Getting Text files
-            string str = "";
+            DirectoryInfo d = new DirectoryInfo(@"..\Data");
+            FileInfo[] Files = d.GetFiles("*.txt");
+            string allTests = "";
             foreach (FileInfo file in Files)
             {
                 using (System.IO.StreamReader param1 = new System.IO.StreamReader(@"..\Data\" + file))
@@ -475,23 +446,19 @@ namespace Generator
                     string t = param1.ReadToEnd();
                     if (t.Length >= 20000)
                     {
-                        str += file.ToString();
-                        str += "\n";
-                        str += runAllResult(t);
-                        str += "\n";
+                        allTests += file.ToString();
+                        allTests += "\n";
+                        allTests += runAllResult(t);
+                        allTests += "\n";
                     }
                 }
-                System.Console.WriteLine(str);
             }
             using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@"..\Data\results.txt"))
             {
-                string[] toFile = str.Split('\n');
-                foreach(var eeeee in toFile)
-                    fileResult.WriteLine(eeeee);
+                string[] dataToFile = allTests.Split('\n');
+                foreach(var testRes in dataToFile)
+                    fileResult.WriteLine(testRes);
             }
-
-            
-
         }
     }
 }

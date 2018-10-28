@@ -39,7 +39,6 @@ namespace Generator
             string test = Regex.Replace(text, Pattern, "");
             if (test == text)
                 return true;
-
             return false;
         }
 
@@ -48,7 +47,6 @@ namespace Generator
             string test = Regex.Replace(text, Pattern1, "");
             if (test == text)
                 return true;
-
             return false;
         }
 
@@ -57,7 +55,6 @@ namespace Generator
             string test = Regex.Replace(text, "[^0-9]", "");
             if (test == text && text[0] != '0')
                 return true;
-
             return false;
         }
         private void init()
@@ -111,7 +108,7 @@ namespace Generator
             }
             else
             {
-                var resut = MessageBox.Show("Coś poszło nie tak, sprawdź wszystkie pola jeszcze raz.");
+                var resut = MessageBox.Show("Coś poszło nie tak, sprawdź wszystkie pola jeszcze raz.", "Błąd");
             }
 
         }

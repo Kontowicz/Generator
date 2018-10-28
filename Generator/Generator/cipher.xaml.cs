@@ -29,7 +29,6 @@ namespace Generator
         }
 
         private geffe geffe;
-        long ammount;
         private const string Pattern = "[^0-9x\\+]";
         private const string Pattern1 = "[^0-1]";
         private const string V = @".\randomInit\";
@@ -60,17 +59,15 @@ namespace Generator
             if (test != "")
                 if (test == text && text[0] != '0')
                     return true;
-
             return false;
         }
 
         private bool checkText(string text)
         {
-            string test = Regex.Replace(text, "[^a-zA-Z0-9 .]", "");
+            string test = Regex.Replace(text, "[^a-zA-Z0-9\\s]", "");
             if (test != "")
                 if (test == text && text[0] != '0')
                     return true;
-
             return false;
         }
 
@@ -79,7 +76,6 @@ namespace Generator
             StringBuilder sb = new StringBuilder();
             foreach (char c in data.ToCharArray())
                 sb.Append(Convert.ToString(c, 2).PadLeft(8, '0'));
-
             return sb.ToString();
         }
 
@@ -88,7 +84,6 @@ namespace Generator
             List<Byte> byteList = new List<Byte>();
             for (int i = 0; i < data.Length; i += 8)
                 byteList.Add(Convert.ToByte(data.Substring(i, 8), 2));
-
             return Encoding.ASCII.GetString(byteList.ToArray());
         }
 
@@ -99,52 +94,40 @@ namespace Generator
 
         private string gen(geffe g, string text)
         {
-            string to_return = "";
-            short test = 0;
-            short p = 0;
-            string ss = StringToBinary(text);
-            List<int> res = new List<int>();
-            for (int i = 0; i < ss.Length; ++i)
+            short value_1 = 0;
+            short value_2 = 0;
+            string binaryData = StringToBinary(text);
+            List<int> encypt = new List<int>();
+            for (int i = 0; i < binaryData.Length; ++i)
             {
-                test = g.next() == '0' ? (short)0 : (short)1;
-                if(ss[i] == '0')
-                {
-                    p = 0;
-                }else
-                {
-                    p = 1;
-                }
+                value_1 = g.next() == '0' ? (short)0 : (short)1;
+                if(binaryData[i] == '0')
+                    value_2 = 0;
+                else
+                    value_2 = 1;
                 
-                res.Add(((test+p)%2));
-
+                encypt.Add(((value_1+value_2)%2));
             }
 
-            return string.Join("", res.ToArray());
+            return string.Join("", encypt.ToArray());
         }
 
         private string de(geffe g, string text)
         {
-            short test = 0;
-            short p = 0;
+            short value_1 = 0;
+            short value_2 = 0;
 
-            List<int> res = new List<int>();
+            List<int> encrypt = new List<int>();
             for (int i = 0; i < text.Length; ++i)
             {
-                test = g.next() == '0' ? (short)0 : (short)1;
+                value_1 = g.next() == '0' ? (short)0 : (short)1;
                 if (text[i] == '0')
-                {
-                    p = 0;
-                }
+                    value_2 = 0;
                 else
-                {
-                    p = 1;
-                }
-
-                res.Add(((test + p) % 2));
-
+                    value_2 = 1;
+                encrypt.Add(((value_1 + value_2) % 2));
             }
-
-            return BinaryToString( string.Join("", res.ToArray()));
+            return BinaryToString( string.Join("", encrypt.ToArray()));
         }
 
         private async void generate_Click(object sender, RoutedEventArgs e)
@@ -164,11 +147,11 @@ namespace Generator
                 string s = result.Text;
                 string test = await Task.Run(() => gen(geffe, s));
                 result.Text = test;
-                MessageBox.Show("Wygenerowano klucz o długości: " + test.Length.ToString());
+                MessageBox.Show("Wygenerowano klucz o długości: " + test.Length.ToString(), "Długość klucza");
             }
             else
             {
-                var resut = MessageBox.Show("Coś poszło nie tak, sprawdź wszystkie pola jeszcze raz.");
+                var resut = MessageBox.Show("Coś poszło nie tak, sprawdź wszystkie pola jeszcze raz.", "Błąd");
             }
         }
 
@@ -192,7 +175,7 @@ namespace Generator
             }
             else
             {
-                var resut = MessageBox.Show("Coś poszło nie tak, sprawdź wszystkie pola jeszcze raz.");
+                var resut = MessageBox.Show("Coś poszło nie tak, sprawdź wszystkie pola jeszcze raz.", "Błąd");
             }
         }
 
@@ -209,7 +192,6 @@ namespace Generator
                 MessageBox.Show("Coś poszło nie tak.\n Orginal message:" + ex.Message);
             }
         }
-
 
         private void load_about(object sender, RoutedEventArgs e)
         {
@@ -240,7 +222,7 @@ namespace Generator
             int n = r.Next(1, 2900);
             string path = V + n.ToString();
             number.Text = n.ToString();
-            MessageBox.Show("Dane początkowe zostały pobrane z folderu: " + path);
+            MessageBox.Show("Dane początkowe zostały pobrane z folderu: " + path, "Info");
             try
             {
                 using (System.IO.StreamReader param1 = new System.IO.StreamReader(path + @"\poly1.txt"))
@@ -261,14 +243,14 @@ namespace Generator
             }
             catch (Exception)
             {
-                MessageBox.Show("Coś poszło nie tak, sprawdź istnieją wszystkie pliki.");
+                MessageBox.Show("Coś poszło nie tak, sprawdź istnieją wszystkie pliki.", "Błąd");
             }
         }
 
         private void init(string num)
         {
             string path = V + num;
-            MessageBox.Show("Dane początkowe zostały pobrane z folderu: " + path);
+            MessageBox.Show("Dane początkowe zostały pobrane z folderu: " + path, "Info");
             try
             {
                 using (System.IO.StreamReader param1 = new System.IO.StreamReader(path + @"\poly1.txt"))
@@ -289,7 +271,7 @@ namespace Generator
             }
             catch (Exception)
             {
-                MessageBox.Show("Coś poszło nie tak, sprawdź istnieją wszystkie pliki.");
+                MessageBox.Show("Coś poszło nie tak, sprawdź istnieją wszystkie pliki.", "Błąd");
             }
         }
 
@@ -301,19 +283,15 @@ namespace Generator
                 try
                 {
                     int folderNum;
-                    bool res = Int32.TryParse(number.Text, out folderNum);
-                    if (res == true)
-                    {
+                    bool operation = Int32.TryParse(number.Text, out folderNum);
+                    if (operation == true)
                         init(number.Text);
-                    }
                     else
-                    {
-                        MessageBox.Show("Sprawdź poprawność wporwadzonej liczby.");
-                    }
+                        MessageBox.Show("Sprawdź poprawność wporwadzonej liczby.", "Błąd");
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Sprawdź poprawność wporwadzonej liczby.");
+                    MessageBox.Show("Sprawdź poprawność wporwadzonej liczby.", "Błąd");
                 }
             }
             else

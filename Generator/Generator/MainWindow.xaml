@@ -63,7 +63,7 @@
               <MenuItem Header="Pokerowy" Click="poker"/>
               <MenuItem Header="Pojedynczych bitów" Click="bits"/>
               <MenuItem Header="Uruchom wszystkie" Click="runAll"/>
-              <MenuItem Header="Uruchom wszystkie dla folderu" Click="runAllWholeDictionary"/>
+                <MenuItem Header="Uruchom wszystkie dla folderu" Click="runAllWholeDirctory"/>
             </MenuItem>
         </Menu>
     </Grid>
