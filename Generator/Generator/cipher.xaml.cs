@@ -195,6 +195,7 @@ namespace Generator
 
         private void load_about(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Process.Start(@".\about.html");
         }
 
         private void saveBinary(object sender, RoutedEventArgs e)

@@ -64,29 +64,49 @@ namespace Generator
                 to_return += geffe.next().ToString();
             return to_return;
         }
+        private bool checkLsfr(string poly, string init)
+        {
+            if (checkInit(init) && checkPoly(poly))
+            {
+                string test = Regex.Replace(poly, "x", "");
+                string[] arr = test.Split('+');
+                int s = int.Parse(arr[0]);
+                if (s == init.Length)
+                    return true;
+            }
+
+            return false;
+        }
 
         private async void generate_Click(object sender, RoutedEventArgs e)
         {
-            if (checkPoly(poly1.Text) == true &&
-                checkPoly(poly2.Text) == true &&
-                checkPoly(poly3.Text) == true &&
-                checkInit(init1.Text) == true &&
-                checkInit(init2.Text) == true &&
-                checkInit(init3.Text) == true &&
-                checkNumer(len.Text))
+            long textLen = 0 ;
+
+            if (checkLsfr(poly1.Text, init1.Text) == true &&
+                checkLsfr(poly2.Text, init2.Text) == true &&
+                checkLsfr(poly3.Text, init3.Text) == true &&
+                checkNumer(len.Text) && long.TryParse(len.Text, out textLen))
             {
                 lfsr _1 = new lfsr(poly1.Text, init1.Text);
                 lfsr _2 = new lfsr(poly2.Text, init2.Text);
                 lfsr _3 = new lfsr(poly3.Text, init3.Text);
                 geffe = new geffe(_1, _2, _3);
-                long textLen = long.Parse(len.Text);
+                
                 string test = await Task.Run(() => gen(geffe, textLen));
                 result.Text = test;
-
-                using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\"+ number.Text + "_" + len.Text + @".txt"))
+                if(number.Text == "Numer folderu z danymi.")
                 {
-                    fileResult.Write(result.Text);
+
+                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\user\" + len.Text + @".txt"))
+                    {
+                        fileResult.Write(result.Text);
+                    }
                 }
+                else
+                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\results\"+ number.Text + "_" + len.Text + @".txt"))
+                    {
+                       fileResult.Write(result.Text);
+                    }
             }
             else
             {
@@ -127,6 +147,7 @@ namespace Generator
 
         private void load_about(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Process.Start(@".\about.html");
         }
         
         private void save_file(object sender, RoutedEventArgs e)
@@ -200,17 +221,17 @@ namespace Generator
 
         private void load_init(object sender, RoutedEventArgs e)
         {
-            string t = number.Text;
-            if(checkNumer(number.Text) == true)
+            int folderNum;
+            bool res = Int32.TryParse(number.Text, out folderNum);
+            if (res)
             {
                 try
                 {
-                    int folderNum;
-                    bool res = Int32.TryParse(number.Text, out folderNum);
-                    if(res == true)
+                    
+                    if(folderNum > 0 && folderNum <2901)
                         init(number.Text);
                     else
-                        MessageBox.Show("Sprawdź poprawność wporwadzonej liczby.", "Błąd");
+                        MessageBox.Show("Wybierz liczbę w zakresie 1 - 2900.", "Błąd");
                 }
                 catch (Exception)
                 {

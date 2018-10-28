@@ -50,6 +50,20 @@ namespace Generator
             return false;
         }
 
+        private bool checkLsfr(string poly, string init)
+        {
+            if(checkInit(init) && checkPoly(poly))
+            {
+                string test = Regex.Replace(poly, "x", "");
+                string[] arr = test.Split('+');
+                int s = int.Parse(arr[0]);
+                if (s == init.Length)
+                    return true;
+            }
+
+            return false;
+        }
+
         private bool checkNumer(string text)
         {
             string test = Regex.Replace(text, "[^0-9]", "");
