@@ -19,7 +19,7 @@ namespace Generator
         private geffe geffe;
         private const string Pattern = "[^0-9x\\+]";
         private const string Pattern1 = "[^0-1]";
-        private const string V = @".\randomInit\";
+        private const string V = @".\Data\randomInit\";
         private Random r = new Random();
 
         public MainWindow()
@@ -96,32 +96,32 @@ namespace Generator
                 result.Text = test;
                 int tryParse = -1;
                 bool res = int.TryParse(number.Text, out tryParse);
-                if (res || ( tryParse < 1 && tryParse > 2900))
+                if (!res || ( tryParse < 1 && tryParse > 2900))
                 {
-                    string dirName = DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss");
-                    System.IO.Directory.CreateDirectory(@".\user\" + dirName);
-                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\user\" + dirName + @"\lsfr1.txt"))
+                    string dirName = DateTime.Now.ToString("yyyy_dd_M HH_mm_ss");
+                    System.IO.Directory.CreateDirectory(@".\Data\user\" + dirName);
+                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\Data\user\" + dirName + @"\lsfr1.txt"))
                     {
                         fileResult.WriteLine(poly1.Text);
                         fileResult.WriteLine(init1.Text);
                     }
-                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\user\" + dirName + @"\lsfr2.txt"))
+                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\Data\user\" + dirName + @"\lsfr2.txt"))
                     {
                         fileResult.WriteLine(poly2.Text);
                         fileResult.WriteLine(init3.Text);
                     }
-                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\user\" + dirName + @"\lsfr3.txt"))
+                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\Data\user\" + dirName + @"\lsfr3.txt"))
                     {
                         fileResult.WriteLine(poly3.Text);
                         fileResult.WriteLine(init3.Text);
                     }
-                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\user\" + dirName + @"\result.txt"))
+                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\Data\user\" + dirName + @"\result.txt"))
                     {
                         fileResult.Write(result.Text);
                     }
                 }
                 else
-                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\results\"+ number.Text + "_" + len.Text + @".txt"))
+                    using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\Data\results\"+ number.Text + "_" + len.Text + @".txt"))
                     {
                        fileResult.Write(result.Text);
                     }
@@ -272,8 +272,13 @@ namespace Generator
         private void load_init(object sender, RoutedEventArgs e)
         {
             if(number.Text.Contains("user"))
-            {
-                initUser(number.Text);
+            {//2018_29_10 12_34_00
+                //string [] s = number.Text.Split('\\');
+                string pattern = @"\d{4}_\d{2}_\d{2} \d{2}_\d{2}_\d{2}";
+                Regex regex = new Regex(pattern);
+                Match match = regex.Match(number.Text);
+                initUser(@".\Data\user\" + match.Value);
+                number.Text = "Numer folderu z danymi.";
                 return;
             }
             int folderNum;
@@ -282,7 +287,6 @@ namespace Generator
             {
                 try
                 {
-                    
                     if(folderNum > 0 && folderNum <2901)
                         init(number.Text);
                     else

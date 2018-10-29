@@ -31,7 +31,7 @@ namespace Generator
         private geffe geffe;
         private const string Pattern = "[^0-9x\\+]";
         private const string Pattern1 = "[^0-1]";
-        private const string V = @".\randomInit\";
+        private const string V = @".\Data\randomInit\";
         private Random r = new Random();
 
 
@@ -64,7 +64,7 @@ namespace Generator
 
         private bool checkText(string text)
         {
-            string test = Regex.Replace(text, "[^a-zA-Z0-9\\s]", "");
+            string test = Regex.Replace(text, "[żźćńółęąśŻŹĆĄŚĘŁÓŃ]", "");
             if (test != "")
                 if (test == text && text[0] != '0')
                     return true;
@@ -129,16 +129,25 @@ namespace Generator
             }
             return BinaryToString( string.Join("", encrypt.ToArray()));
         }
+        private bool checkLsfr(string poly, string init)
+        {
+            if (checkInit(init) && checkPoly(poly))
+            {
+                string test = Regex.Replace(poly, "x", "");
+                string[] arr = test.Split('+');
+                int s = int.Parse(arr[0]);
+                if (s == init.Length)
+                    return true;
+            }
 
+            return false;
+        }
         private async void generate_Click(object sender, RoutedEventArgs e)
         {
-            if (checkPoly(poly1.Text) == true &&
-                checkPoly(poly2.Text) == true &&
-                checkPoly(poly3.Text) == true &&
-                checkInit(init1.Text) == true &&
-                checkInit(init2.Text) == true &&
-                checkInit(init3.Text) == true &&
-                result.Text.Length < 1000000)
+            if (checkLsfr(poly1.Text, init1.Text) == true &&
+                checkLsfr(poly2.Text, init2.Text) == true &&
+                checkLsfr(poly3.Text, init3.Text) == true &&
+                result.Text.Length < 1000000 && checkText(result.Text))
             {
                 lfsr _1 = new lfsr(poly1.Text, init1.Text);
                 lfsr _2 = new lfsr(poly2.Text, init2.Text);
@@ -157,12 +166,9 @@ namespace Generator
 
         private async void decode(object sender, RoutedEventArgs e)
         {
-            if (checkPoly(poly1.Text) == true &&
-                checkPoly(poly2.Text) == true &&
-                checkPoly(poly3.Text) == true &&
-                checkInit(init1.Text) == true &&
-                checkInit(init2.Text) == true &&
-                checkInit(init3.Text) == true &&
+            if (checkLsfr(poly1.Text, init1.Text) == true &&
+                checkLsfr(poly2.Text, init2.Text) == true &&
+                checkLsfr(poly3.Text, init3.Text) == true &&
                 checkInit(result.Text))
             {
                 lfsr _1 = new lfsr(poly1.Text, init1.Text);
@@ -200,7 +206,10 @@ namespace Generator
 
         private void saveBinary(object sender, RoutedEventArgs e)
         {
-            using (FileStream fs = File.Create("binary.dat", 2048, FileOptions.None))
+            string dirName = DateTime.Now.ToString("yyyy_dd_M HH_mm_ss");
+            System.IO.Directory.CreateDirectory(@".\Data\binary");
+            System.IO.Directory.CreateDirectory(@".\Data\binary\" + dirName);
+            using (FileStream fs = File.Create(@".\Data\binary\" + dirName + @"\bin.txt", 2048, FileOptions.None))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(fs, Encoding.Unicode.GetBytes(result.Text));
