@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -516,28 +518,50 @@ namespace Generator
 
         private void runAllWholeDirctory(object sender, RoutedEventArgs e)
         {
-            DirectoryInfo d = new DirectoryInfo(@"..\Data");
+            System.IO.Directory.CreateDirectory(@".\Data\testy");
+            DirectoryInfo d = new DirectoryInfo(@".\Data\testy");
+
             FileInfo[] Files = d.GetFiles("*.txt");
-            string allTests = "";
-            foreach (FileInfo file in Files)
+            if(Files.Length == 0)
             {
-                using (System.IO.StreamReader param1 = new System.IO.StreamReader(@"..\Data\" + file))
+                MessageBox.Show("Brak plików txt w folderze .\\Data\\testy.", "Błąd");
+            }
+            else
+            {
+                string allTests = "";
+                foreach (FileInfo file in Files)
                 {
-                    string t = param1.ReadToEnd();
-                    if (t.Length >= 20000)
+                    using (System.IO.StreamReader param1 = new System.IO.StreamReader(@".\Data\" + file))
                     {
-                        allTests += file.ToString();
-                        allTests += "\n";
-                        allTests += runAllResult(t);
-                        allTests += "\n";
+                        string t = param1.ReadToEnd();
+                        if (t.Length >= 20000)
+                        {
+                            allTests += file.ToString();
+                            allTests += "\n";
+                            allTests += runAllResult(t);
+                            allTests += "\n";
+                        }
                     }
                 }
+                using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\Data\results.txt"))
+                {
+                    string[] dataToFile = allTests.Split('\n');
+                    foreach (var testRes in dataToFile)
+                        fileResult.WriteLine(testRes);
+                }
             }
-            using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@"..\Data\results.txt"))
+
+        }
+
+        private void save_binary(object sender, RoutedEventArgs e)
+        {
+            string dirName = DateTime.Now.ToString("yyyy_dd_M HH_mm_ss");
+            System.IO.Directory.CreateDirectory(@".\Data\binary\generated");
+            System.IO.Directory.CreateDirectory(@".\Data\binary\generated\" + dirName);
+            using (FileStream fs = File.Create(@".\Data\binary\generated\" + dirName + @"\bin.txt", 2048, FileOptions.None))
             {
-                string[] dataToFile = allTests.Split('\n');
-                foreach(var testRes in dataToFile)
-                    fileResult.WriteLine(testRes);
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(fs, Encoding.ASCII.GetBytes(result.Text));
             }
         }
     }

@@ -207,12 +207,12 @@ namespace Generator
         private void saveBinary(object sender, RoutedEventArgs e)
         {
             string dirName = DateTime.Now.ToString("yyyy_dd_M HH_mm_ss");
-            System.IO.Directory.CreateDirectory(@".\Data\binary");
-            System.IO.Directory.CreateDirectory(@".\Data\binary\" + dirName);
-            using (FileStream fs = File.Create(@".\Data\binary\" + dirName + @"\bin.txt", 2048, FileOptions.None))
+            System.IO.Directory.CreateDirectory(@".\Data\binary\cipher");
+            System.IO.Directory.CreateDirectory(@".\Data\binary\cipher\" + dirName);
+            using (FileStream fs = File.Create(@".\Data\binary\cipher\" + dirName + @"\bin.txt", 2048, FileOptions.None))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(fs, Encoding.Unicode.GetBytes(result.Text));
+                formatter.Serialize(fs, Encoding.ASCII.GetBytes(result.Text));
             }
         }
 
