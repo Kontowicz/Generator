@@ -47,7 +47,8 @@ namespace Generator
         private bool checkInit(string text)
         {
             string test = Regex.Replace(text, Pattern1, "");
-            if (test == text)
+            string tmp = Regex.Replace(text, "0", "");
+            if (test == text && tmp != "")
                 return true;
 
             return false;

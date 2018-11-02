@@ -40,7 +40,8 @@ namespace Generator
         private bool checkInit(string text)
         {
             string test = Regex.Replace(text, Pattern1, "");
-            if (test == text)
+            string tmp = Regex.Replace(text, "0", "");
+            if (test == text && tmp != "")
                 return true;
             return false;
         }
@@ -555,14 +556,23 @@ namespace Generator
 
         private void save_binary(object sender, RoutedEventArgs e)
         {
-            string dirName = DateTime.Now.ToString("yyyy_dd_M HH_mm_ss");
-            System.IO.Directory.CreateDirectory(@".\Data\binary\generated");
-            System.IO.Directory.CreateDirectory(@".\Data\binary\generated\" + dirName);
-            using (FileStream fs = File.Create(@".\Data\binary\generated\" + dirName + @"\bin.txt", 2048, FileOptions.None))
+            if(result.Text == "" || !checkInit(result.Text))
             {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(fs, Encoding.ASCII.GetBytes(result.Text));
+                MessageBox.Show("Błędne dane do zapisu.", "Błąd");
             }
+            else
+            {
+
+                string dirName = DateTime.Now.ToString("yyyy_dd_M HH_mm_ss");
+                System.IO.Directory.CreateDirectory(@".\Data\binary\generated");
+                System.IO.Directory.CreateDirectory(@".\Data\binary\generated\" + dirName);
+                using (FileStream fs = File.Create(@".\Data\binary\generated\" + dirName + @"\bin.txt", 2048, FileOptions.None))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(fs, Encoding.ASCII.GetBytes(result.Text));
+                }
+            }
+
         }
     }
 }

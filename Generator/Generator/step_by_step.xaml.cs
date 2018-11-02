@@ -17,12 +17,14 @@ namespace Generator
 {
     /// <summary>
     /// Interaction logic for step_by_stepxaml.xaml
-    /// </summary>
+    /// </summary
+
     public partial class step_by_stepxaml : Window
     {
+
         private const string Pattern = "[^0-9x\\+]";
         private const string Pattern1 = "[^0-1]";
-        private geffe geffe;
+        private geffe_step geffe;
         string res;
         public step_by_stepxaml()
         {
@@ -45,7 +47,8 @@ namespace Generator
         private bool checkInit(string text)
         {
             string test = Regex.Replace(text, Pattern1, "");
-            if (test == text)
+            string tmp = Regex.Replace(text, "0", "");
+            if (test == text && tmp != "")
                 return true;
             return false;
         }
@@ -103,12 +106,9 @@ namespace Generator
         }
         private void start(object sender, RoutedEventArgs e)
         {
-            if (checkPoly(poly1.Text) == true &&
-                checkPoly(poly2.Text) == true &&
-                checkPoly(poly3.Text) == true &&
-                checkInit(init1.Text) == true &&
-                checkInit(init2.Text) == true &&
-                checkInit(init3.Text) == true )
+            if (checkLsfr(poly1.Text, init1.Text) == true &&
+                checkLsfr(poly2.Text, init2.Text) == true &&
+                checkLsfr(poly3.Text, init3.Text) == true )
             {
                 lfsr _1 = new lfsr(poly1.Text, init1.Text);
                 lfsr _2 = new lfsr(poly2.Text, init2.Text);
@@ -117,7 +117,7 @@ namespace Generator
                 stop1.Visibility = Visibility.Visible;
                 next1.Visibility = Visibility.Visible;
                 res = "";
-                geffe = new geffe(_1, _2, _3);
+                geffe = new geffe_step(_1, _2, _3);
                 init();
             }
             else
@@ -129,7 +129,10 @@ namespace Generator
 
         private void next(object sender, RoutedEventArgs e)
         {
-            string next = geffe.next().ToString();
+            
+            Tuple<int, int> result_geffe = geffe.next();
+            string next = result_geffe.Item1.ToString();
+            string c = result_geffe.Item2.ToString();
             init();
             FlowDocument mcFlowDoc = new FlowDocument();
             Paragraph para = new Paragraph();
@@ -140,15 +143,17 @@ namespace Generator
             result.Document = mcFlowDoc;
             _2.Stroke = new SolidColorBrush(Colors.Black);
             _3.Stroke = new SolidColorBrush(Colors.Black);
-            if(next == "1")
-            {
-                _2.Stroke = new SolidColorBrush(Colors.Red);
-                _3.Stroke = new SolidColorBrush(Colors.Black);
-            }
-            else
+
+            if(c == "1")
             {
                 _2.Stroke = new SolidColorBrush(Colors.Black);
                 _3.Stroke = new SolidColorBrush(Colors.Red);
+
+            }
+            else
+            {
+                _2.Stroke = new SolidColorBrush(Colors.Red);
+                _3.Stroke = new SolidColorBrush(Colors.Black);
             }
 
         }

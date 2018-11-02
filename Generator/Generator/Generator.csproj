@@ -58,6 +58,7 @@
     <Compile Include="cipher.xaml.cs">
       <DependentUpon>cipher.xaml</DependentUpon>
     </Compile>
+    <Compile Include="geffe_step.cs" />
     <Compile Include="step_by_step.xaml.cs">
       <DependentUpon>step_by_step.xaml</DependentUpon>
     </Compile>
