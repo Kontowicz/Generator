@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>O programie</title>
+</head>
+
+<body>
+<h1>Wykonawca programu: Piotr Kontowicz student 3 roku informatyki.</h1>
+
+<h2>GeffeGenerator:</h2>
+<ol>
+<li>Załaduj początkowe:
+	<ul>
+		<li>Jeśli w polu "Numer folderu z danymi" nie jest wprowadzona żadna liczba w dozwololonym zakresie to stany początkowe i 
+		wielomiany rejestrów przesównych zostalą wylosowane z przygotowanych wcześniej zestawów znajdujących się w Data\randomInit. </li>
+		<li>Jeśli w tym polu jest wprowadzony prawidłowy numer zestwu danych to zostaną one załadowane do programu.</li>
+		<li>Dozwolony zakres wprowadzanych wartości od 1 do 2900.</li>
+		<li>Jeśli użytkownik chce wprowadzić do programu ustawienia które wcześniej on sam wprowadzał do programu musi w pole 
+		"Numer folderu z danymi" wpisać słowo user a po nim nazwę folderu (znajdującego się w folderze Data\user) 
+		która jest datą generacji danych z wprowadzonym przez niego zestawem wielomianów i stanów rejestrów przesuwnych.</li>
+	</ul>
+</li>
+
+<li>Generuj:
+	<ul>
+		<li>Ciąg generowany jest w nowym wątku, jeśli w pole "Dlugość generowanego ciągu" została wprowadzona duża liczba należy uzbroić się w cierpliwość.</li>
+		<li>Klienięcie tego przycisku sprawia że zostanie wygenerowy ciąg zer i jedynek o długości wskazanej w polu "Długosć generowanego ciągu".</li>
+		<li>Wynik generacji zostanie autmatycznie zapisany w folderze Data\results w pliku o nazwie: [numer zestawu stanów rejestrów i wielomianów]_[długość ciągu].</li>
+		<li>W przypadku gdy użytkownik zdecyduje się za wprowadzenie wpłasnych danych początkowych (pole "Numer folderu z danymi." ma być w tym przypaku puste lub wypełnione jego orginalną zawartością) do genratora wynik jego pracy (oraz stany początkowe rejestrów przesównych) zostanie zapisany
+		w folderze Data\user u którym zostanie utworzony nowy folder o nazwie [aktualna data] w którym zostaną utwrzone pliki: lsfr1.txt, lsfr2.txt, lsfr3.txt, result.txt
+		w których odpowiednio będą znajdowały się stany początkowe rejestrów i ich wielomiany, w pliku result.txt zostanie zapisany wegenrowany ciąg znaków.</li>
+	</ul>
+</li>
+
+<li>Pola tekstowe:
+	<ul>
+		<li>Długość generowanego ciągu, w tym polu wprowadzamy liczbę określającą długość generowanego ciągu</li>
+		<li>Numer folderu z danymi: odpowiednio wprowadzone w nim dane określają skąd mają zostać wprowadzone dane początkowe. Wprowadzenie liczby w zakresie od 1 do 2900
+		spowoduje pobranie danych z odpowiedniego zestawu przygotowanych wcześniej danych. Wprowadzenie słowa user a następnie nazwy odpowiedniego folderu 
+		spowoduje wczytanie zestawu danych których użytkownik wcześniej używał i zostały zapisane po kliknięciu przycisku generuj.</li>
+		<li>Pole wielomian: przyjmuje poprawnie spofrmatowane wielomiany w których nazwyższa potęga znajduje się po skrajnej lewej stronie, a po prawej stronie znajduje się +1.
+		Dozolone znaki: cyfry, 'x', '+'</li>
+		<li>Pole wartości: przyjmuje znaki 1 i 0, przy czym ich ilość określona jest przez najwyższą potęgę w wielomianie.</li>
+	</ul>
+</li>
+
+<li>Zapisz binarnie:
+	<ul>
+		<li>Zapisz do pliku binarnego który będzie znajdował się w \Data\binary\generated wygenerowanych ciąz znaków. Jeśli nie będzie danych, lub 
+			w wygenerowany ciąg zostan wprowadzone niedozwolone znaki (wszystkie inne niż 0 lub 1) to plik nie zostanie utworzony.</li>
+	</ul>
+</li>
+
+<li>Reset:
+	<ul>
+		<li>Przywraca początkowe napisy w polach tekstowych.</li>
+	</ul>
+</li>
+
+<Li>Ograniczenia
+	<ul>
+		<li>W pola wielomian należy wpisać poprawnie skonstruowany wielomian.</li>
+		<li>W polu wielomian dozwolone są znaki: 0-9, x i +</li>
+		<li>W polu wartości dozwolone są znaki: 0 i 1</li>
+		<li>Ilość wpisanych zer i jedynek w polu wartości musi wynosić równonwartość najwyższej potęgi w wielomianie</li>
+	</ul>
+</li>
+</ol>
+
+<h2>Krok po kroku:</h2>
+<ol>
+	<ul>
+		<li>Obowiązują ogarniczenia wymienione w GeffeGenerator.</li>
+		<li>Nie ma możliwości losowania wartości początkoweych należy je wpisywać ręcznie.</li>
+		<li>Umożliwia obserwowanie krokowej pracy generatora.</li>		
+	</ul>
+</ol>
+
+<h2>Szyfruj:</h2>
+<ol>
+	<ul>
+		<li>Dzwolone są w nim znaki znajdujęce się w podstawowej tablicy ASII.</li>
+		<li>Umożliwia zaszyforwanie i odszyfrowanie wiadomości tesktowej generowanym kluczem.</li>
+		<li>Szyfr który zostanie zoszyfrowany może zawieraćc jedynie znaki 0 lub 1.</li>
+		<li>Szyrowanie polega na operacji xor każdego bitu wiadomości z bitem generowanym przez generator.</li>
+		<li>Program umożliwia zapisanie danych binarnie.</li>
+		<li>Program umożliwia wczytanie pliku tesktowego z dowolnego położenia w systemi plików i zapis tesktu z pola tekstowego w wybranym przez użytkownika miejscu w 
+		sytemie plików.</li>
+		<li>Można w nim załadować początkowe parametry jak w GeffeGenerator, z identycznymi ograniczeniami.</li>
+	</ul>
+</ol>
+
+<h2>Dostepne Testy:</h2>
+<ol>
+Wszystkie testy należy wykonywać dla ciągu losowego o długości co najmniej 20000. W przypadku dłuższego zostanie testowi poddane pierwsze 20000 znaków. W przypadku którszego 
+użytkownik zostanie poinformowany o błędzie.
+	<ul>
+		<li>Serii: test serii dla określonego wcześniej ciągu znaków.</li>
+		<li>Długiej serii: test długiej serii dla określonego wcześniej ciągu znaków.</li>
+		<li>Pokerowy: test pokerowy dla określonego wcześniej ciągu znaków.</li>
+		<li>Pojedynczych bitów: test pojedynczych bitów dla określonego wcześniej ciągu znaków.</li>
+		<li>Uruchom wszystkie: uruchamia wszystkie testy i ich wyniki pokazuje w nowym oknie.</li>
+		<li>Uruchom wszystkie dla folderu: uruchamia wszytkie testy dla wszystkich plików znajdujących się w folderze Data. Wyniki testów zapisywane 
+		są do jednego pliku tekstowego o nazwie results.txt który utworzony zostanie w folderze Data\testy.</li>
+	</ul>
+</ol>
+
+</body>
+</html>
