@@ -102,6 +102,7 @@ namespace Generator
                 if (!res || ( tryParse < 1 && tryParse > 2900))
                 {
                     string dirName = DateTime.Now.ToString("yyyy_dd_M HH_mm_ss");
+                    System.IO.Directory.CreateDirectory(@".\Data\");
                     System.IO.Directory.CreateDirectory(@".\Data\user\" + dirName);
                     using (System.IO.StreamWriter fileResult = new System.IO.StreamWriter(@".\Data\user\" + dirName + @"\lsfr1.txt"))
                     {
@@ -280,8 +281,16 @@ namespace Generator
                 string pattern = @"\d{4}_\d{2}_\d{2} \d{2}_\d{2}_\d{2}";
                 Regex regex = new Regex(pattern);
                 Match match = regex.Match(number.Text);
-                initUser(@".\Data\user\" + match.Value);
-                number.Text = "Numer folderu z danymi.";
+                if(match.Success)
+                {
+                    initUser(@".\Data\user\" + match.Value);
+                    number.Text = "Numer folderu z danymi.";
+                }
+                else
+                {
+                    MessageBox.Show("Wystąpił błąd, sprawdź wszystko jeszcze raz.", "Błąd");
+                }
+                
                 return;
             }
             int folderNum;
@@ -519,6 +528,7 @@ namespace Generator
 
         private void runAllWholeDirctory(object sender, RoutedEventArgs e)
         {
+            System.IO.Directory.CreateDirectory(@".\Data\");
             System.IO.Directory.CreateDirectory(@".\Data\testy");
             DirectoryInfo d = new DirectoryInfo(@".\Data\testy");
 
@@ -562,7 +572,8 @@ namespace Generator
             }
             else
             {
-
+                System.IO.Directory.CreateDirectory(@".\Data\");
+                System.IO.Directory.CreateDirectory(@".\Data\binary\");
                 string dirName = DateTime.Now.ToString("yyyy_dd_M HH_mm_ss");
                 System.IO.Directory.CreateDirectory(@".\Data\binary\generated");
                 System.IO.Directory.CreateDirectory(@".\Data\binary\generated\" + dirName);
