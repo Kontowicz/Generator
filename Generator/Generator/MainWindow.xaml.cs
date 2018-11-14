@@ -62,10 +62,18 @@ namespace Generator
 
         private string gen(geffe g, long len)
         {
-            string to_return = "";
+            //string to_return = "";
+            //for (long i = 0; i < len; ++i)
+            //    to_return += geffe.next().ToString();
+            //return to_return;
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            StringBuilder sb = new StringBuilder();
             for (long i = 0; i < len; ++i)
-                to_return += geffe.next().ToString();
-            return to_return;
+                sb.Append(geffe.next().ToString());
+            watch.Stop();
+            System.Console.WriteLine(watch.Elapsed);
+            return sb.ToString();
+
         }
         private bool checkLsfr(string poly, string init)
         {
